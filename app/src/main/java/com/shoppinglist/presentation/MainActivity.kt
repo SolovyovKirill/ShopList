@@ -1,15 +1,12 @@
 package com.shoppinglist.presentation
 
-import android.media.browse.MediaBrowser
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.shoppinglist.R
-import com.shoppinglist.domain.shopitem.ShopItem
 import com.shoppinglist.presentation.adapter.ShopListAdapter
 import com.shoppinglist.presentation.viewmodel.mainviewmodel.MainViewModel
 
@@ -24,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.shopListLiveData.observe(this) {
-            shopListAdapter.shopList = it
+            shopListAdapter.submitList(it)
         }
     }
 
@@ -63,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = shopListAdapter.shopList[viewHolder.adapterPosition]
+                val item = shopListAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteShopItem(item)
             }
 
@@ -74,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListener() {
         shopListAdapter.onShopItemClickListener = {
-            Log.d("MainActivity", "${it}")
+            Log.d("MainActivity", it.toString())
         }
     }
 
