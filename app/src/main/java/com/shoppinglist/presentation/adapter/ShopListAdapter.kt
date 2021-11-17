@@ -6,16 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.shoppinglist.R
 import com.shoppinglist.domain.shopitem.ShopItem
+import com.shoppinglist.presentation.diffcallback.ShopListDiffCallback
 
 class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
 
     var shopList = listOf<ShopItem>()
         set(value) {
+            val callback = ShopListDiffCallback(shopList, value)
+            val diffUtil = DiffUtil.calculateDiff(callback)
+            diffUtil.dispatchUpdatesTo(this)
             field = value
-            notifyDataSetChanged()
         }
 
     var counter: Int = 0
@@ -98,10 +102,6 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
     class ShopItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val tvName = view.findViewById<TextView>(R.id.tv_name)
         val tvCount = view.findViewById<TextView>(R.id.tv_count)
-    }
-
-    interface OnShopItemLongClickListener {
-        fun onShopItemLongClick(shopItem: ShopItem)
     }
 
     companion object {
