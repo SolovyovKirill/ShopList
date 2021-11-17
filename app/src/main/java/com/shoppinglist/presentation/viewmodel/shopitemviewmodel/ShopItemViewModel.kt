@@ -84,19 +84,17 @@ class ShopItemViewModel : ViewModel() {
         return result
     }
 
-    private fun resetErrorInputName() {
+    fun resetErrorInputName() {
         _errorInputNameLiveData.value = false
     }
 
-    private fun resetErrorInputCount() {
+    fun resetErrorInputCount() {
         _errorInputCountLiveData.value = false
     }
 
     private fun finishWork() {
         _shouldCloseScreen.value = Unit
     }
-
-
 
 
 }

@@ -1,13 +1,15 @@
 package com.shoppinglist.presentation.screen.mainactivity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.shoppinglist.R
 import com.shoppinglist.presentation.adapter.ShopListAdapter
+import com.shoppinglist.presentation.screen.shopitemactivity.ShopItemActivity
 import com.shoppinglist.presentation.viewmodel.mainviewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +24,11 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.shopListLiveData.observe(this) {
             shopListAdapter.submitList(it)
+        }
+        val buttonAddShopItem = findViewById<FloatingActionButton>(R.id.btn_add_shop_item)
+        buttonAddShopItem.setOnClickListener {
+            val intent = ShopItemActivity.newIntentAddItem(this)
+            startActivity(intent)
         }
     }
 
@@ -72,6 +79,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListener() {
         shopListAdapter.onShopItemClickListener = {
             Log.d("MainActivity", it.toString())
+            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+            startActivity(intent)
         }
     }
 
