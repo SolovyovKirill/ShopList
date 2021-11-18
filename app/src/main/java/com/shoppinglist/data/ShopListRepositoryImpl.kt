@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shoppinglist.domain.repository.ShopListRepository
 import com.shoppinglist.domain.shopitem.ShopItem
-import java.lang.RuntimeException
 import kotlin.random.Random
 
 object ShopListRepositoryImpl : ShopListRepository {
@@ -40,7 +39,9 @@ object ShopListRepositoryImpl : ShopListRepository {
     }
 
     override fun getShopItem(shopItemId: Int): ShopItem {
-        return shopList.find { it -> it.id == shopItemId }
+        return shopList.find {
+            it.id == shopItemId
+        }
             ?: throw RuntimeException("Element with id $shopItemId no found")
     }
 
