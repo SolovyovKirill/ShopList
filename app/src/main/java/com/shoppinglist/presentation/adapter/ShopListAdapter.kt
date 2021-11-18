@@ -32,8 +32,6 @@ class ShopListAdapter :
     override fun onBindViewHolder(viewHolder: ShopItemViewHolder, position: Int) {
         val shopItem = getItem(position)
         with(viewHolder) {
-            tvName.text = shopItem.name
-            tvCount.text = shopItem.count.toString()
             view.setOnLongClickListener {
                 onShopItemLongClickListener?.invoke(shopItem)
                 true
@@ -42,8 +40,8 @@ class ShopListAdapter :
                 onShopItemClickListener?.invoke(shopItem)
 
             }
-            viewHolder.tvName.text = shopItem.name
-            viewHolder.tvCount.text = shopItem.count.toString()
+            tvName.text = shopItem.name
+            tvCount.text = shopItem.count.toString()
         }
     }
 

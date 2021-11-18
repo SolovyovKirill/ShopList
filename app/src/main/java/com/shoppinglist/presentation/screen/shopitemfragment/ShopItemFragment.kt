@@ -1,5 +1,6 @@
 package com.shoppinglist.presentation.screen.shopitemfragment
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +19,8 @@ import com.shoppinglist.presentation.viewmodel.shopitemviewmodel.ShopItemViewMod
 class ShopItemFragment : Fragment() {
 
     private lateinit var shopItemViewModel: ShopItemViewModel
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
     private lateinit var etName: EditText
@@ -25,6 +28,15 @@ class ShopItemFragment : Fragment() {
     private lateinit var btnSave: MaterialButton
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener) {
+            onEditingFinishedListener = context
+        } else {
+            throw RuntimeException("Activity must implement OnEditingFinishedListener")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +67,8 @@ class ShopItemFragment : Fragment() {
             } else {
                 null
             }
-            tilCount.error = message
+            tilName.error = message
+
         }
         shopItemViewModel.errorInputCountLiveData.observe(viewLifecycleOwner) {
             val message = if (it) {
@@ -63,10 +76,10 @@ class ShopItemFragment : Fragment() {
             } else {
                 null
             }
-            tilName.error = message
+            tilCount.error = message
         }
         shopItemViewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener.onEditingFinished()
         }
     }
 
@@ -145,6 +158,10 @@ class ShopItemFragment : Fragment() {
         btnSave = view.findViewById(R.id.btn_save)
     }
 
+    interface OnEditingFinishedListener {
+        fun onEditingFinished()
+    }
+
     companion object {
         const val SCREEN_MODE = "extra_mode"
         const val SHOP_ITEM_ID = "extra_shop_item_id"
@@ -153,16 +170,9 @@ class ShopItemFragment : Fragment() {
         const val MODE_UNKNOWN = ""
 
         fun newInstanceAddItem(): ShopItemFragment {
-            //Не в стиле котлин
-//            val args = Bundle()
-//            args.putString(SCREEN_MODE, MODE_ADD)
-//            val fragment = ShopItemFragment()
-//            fragment.arguments = args
-//            return fragment
-            //В стиле котлин
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
-                    putString(SCREEN_MODE, MODE_EDIT)
+                    putString(SCREEN_MODE, MODE_ADD)
                 }
             }
         }
@@ -170,7 +180,7 @@ class ShopItemFragment : Fragment() {
         fun newInstanceEditItem(shopItemId: Int): ShopItemFragment {
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
-                    putString(SCREEN_MODE, MODE_ADD)
+                    putString(SCREEN_MODE, MODE_EDIT)
                     putInt(SHOP_ITEM_ID, shopItemId)
                 }
             }
