@@ -5,6 +5,6 @@ import com.shoppinglist.domain.shopitem.ShopItem
 
 class GetShopItemUseCase(private val shopListRepository: ShopListRepository) {
 
-    fun getShopItem(shopItemId: Int): ShopItem =
+    suspend fun getShopItem(shopItemId: Int): ShopItem =
         shopListRepository.getShopItem(shopItemId)
 }
