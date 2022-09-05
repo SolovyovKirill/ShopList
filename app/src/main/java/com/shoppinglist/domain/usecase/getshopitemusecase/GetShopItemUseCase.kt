@@ -1,7 +1,7 @@
 package com.shoppinglist.domain.usecase.getshopitemusecase
 
 import com.shoppinglist.domain.repository.ShopListRepository
-import com.shoppinglist.domain.shopitem.ShopItem
+import com.shoppinglist.domain.model.ShopItem
 
 class GetShopItemUseCase(private val shopListRepository: ShopListRepository) {
 

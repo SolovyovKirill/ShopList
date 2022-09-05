@@ -9,9 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.shoppinglist.R
 import com.shoppinglist.databinding.FragmentShopItemBinding
-import com.shoppinglist.domain.shopitem.ShopItem
+import com.shoppinglist.domain.model.ShopItem
 import com.shoppinglist.presentation.viewmodel.shopitemviewmodel.ShopItemViewModel
 
 class ShopItemFragment : Fragment() {

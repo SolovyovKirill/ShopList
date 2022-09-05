@@ -1,6 +1,6 @@
 package com.shoppinglist.data
 
-import com.shoppinglist.domain.shopitem.ShopItem
+import com.shoppinglist.domain.model.ShopItem
 
 class ShopListMapper {
 

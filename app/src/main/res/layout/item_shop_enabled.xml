@@ -4,7 +4,7 @@
     <data>
         <variable
             name="shopItem"
-            type="com.shoppinglist.domain.shopitem.ShopItem" />
+            type="com.shoppinglist.domain.model.ShopItem" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

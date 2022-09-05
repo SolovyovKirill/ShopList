@@ -1,7 +1,7 @@
 package com.shoppinglist.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.shoppinglist.domain.shopitem.ShopItem
+import com.shoppinglist.domain.model.ShopItem
 
 interface ShopListRepository {
 

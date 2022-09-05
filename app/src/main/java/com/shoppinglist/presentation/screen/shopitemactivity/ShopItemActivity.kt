@@ -3,19 +3,11 @@ package com.shoppinglist.presentation.screen.shopitemactivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
 import com.shoppinglist.R
-import com.shoppinglist.domain.shopitem.ShopItem
+import com.shoppinglist.domain.model.ShopItem
 import com.shoppinglist.presentation.screen.shopitemfragment.ShopItemFragment
-import com.shoppinglist.presentation.viewmodel.shopitemviewmodel.ShopItemViewModel
 import java.lang.RuntimeException
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {

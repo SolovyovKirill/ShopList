@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.shoppinglist.R
 import com.shoppinglist.databinding.ItemShopDisabledBinding
 import com.shoppinglist.databinding.ItemShopEnabledBinding
-import com.shoppinglist.domain.shopitem.ShopItem
+import com.shoppinglist.domain.model.ShopItem
 import com.shoppinglist.presentation.diffcallback.ShopItemDiffCallback
 
 class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
