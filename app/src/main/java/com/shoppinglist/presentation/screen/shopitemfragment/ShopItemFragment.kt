@@ -1,6 +1,8 @@
 package com.shoppinglist.presentation.screen.shopitemfragment
 
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,6 +17,7 @@ import com.shoppinglist.domain.model.ShopItem
 import com.shoppinglist.presentation.viewmodel.ViewModelFactory
 import com.shoppinglist.presentation.viewmodel.shopitemviewmodel.ShopItemViewModel
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class ShopItemFragment : Fragment() {
 
@@ -30,7 +33,7 @@ class ShopItemFragment : Fragment() {
 
     private var _binding: FragmentShopItemBinding? = null
     private val binding: FragmentShopItemBinding
-    get() = _binding ?: throw RuntimeException("FragmentShopItemBinding == null ")
+        get() = _binding ?: throw RuntimeException("FragmentShopItemBinding == null ")
 
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
@@ -53,9 +56,9 @@ class ShopItemFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-       _binding = FragmentShopItemBinding.inflate(inflater, container, false)
+        _binding = FragmentShopItemBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -109,13 +112,28 @@ class ShopItemFragment : Fragment() {
     private fun lunchEditMode() {
         viewModel.getShopItemId(shopItemId)
         binding.btnSave.setOnClickListener {
-            viewModel.editShopItem(binding.etName.text?.toString(), binding.etCount.text?.toString())
+            viewModel.editShopItem(binding.etName.text?.toString(),
+                binding.etCount.text?.toString())
         }
     }
 
     private fun lunchAddMode() {
         binding.btnSave.setOnClickListener {
-            viewModel.addShopItem(binding.etName.text?.toString(), binding.etCount.text?.toString())
+//            viewModel.addShopItem(
+//                binding.etName.text?.toString(),
+//                binding.etCount.text?.toString()
+//            )
+            thread {
+                context?.contentResolver?.insert(
+                    Uri.parse("content://com.shoppinglist/shop_items"),
+                    ContentValues().apply {
+                        put("id", 0)
+                        put("name", binding.etName.text?.toString())
+                        put("count", binding.etCount.text?.toString()?.toInt())
+                        put("enable", true)
+                    }
+                )
+            }
         }
     }
 

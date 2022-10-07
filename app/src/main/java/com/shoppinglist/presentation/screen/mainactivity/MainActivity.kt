@@ -1,6 +1,8 @@
 package com.shoppinglist.presentation.screen.mainactivity
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.shoppinglist.R
 import com.shoppinglist.ShopListApp
 import com.shoppinglist.databinding.ActivityMainBinding
+import com.shoppinglist.domain.model.ShopItem
 import com.shoppinglist.presentation.adapter.ShopListAdapter
 import com.shoppinglist.presentation.screen.shopitemactivity.ShopItemActivity
 import com.shoppinglist.presentation.screen.shopitemfragment.ShopItemFragment
 import com.shoppinglist.presentation.viewmodel.ViewModelFactory
 import com.shoppinglist.presentation.viewmodel.mainviewmodel.MainViewModel
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
@@ -48,6 +52,30 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
             } else {
                 launchFragment(ShopItemFragment.newInstanceAddItem())
             }
+        }
+        thread {
+            val cursor = contentResolver.query(
+                Uri.parse("content://com.shoppinglist/shop_items"),
+                null,
+                null,
+                null,
+                null,
+                null
+            )
+            while (cursor?.moveToNext() == true) {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                val count = cursor.getInt(cursor.getColumnIndexOrThrow("count"))
+                val enable = cursor.getInt(cursor.getColumnIndexOrThrow("enable")) > 0
+                val shopItem = ShopItem(
+                    id = id,
+                    name = name,
+                    count = count,
+                    enable = enable
+                )
+                Log.d("MainActivity", shopItem.toString())
+            }
+            cursor?.close()
         }
     }
 
@@ -101,7 +129,14 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val item = shopListAdapter.currentList[viewHolder.adapterPosition]
-                viewModel.deleteShopItem(item)
+//                viewModel.deleteShopItem(item)
+                thread {
+                    contentResolver.delete(
+                        Uri.parse("content://com.shoppinglist/shop_items"),
+                        null,
+                        arrayOf(item.id.toString())
+                    )
+                }
             }
 
         }
